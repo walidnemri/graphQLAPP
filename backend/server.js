@@ -1,18 +1,21 @@
-var express = require('express');
-var { graphqlHTTP } = require('express-graphql');
-var { buildSchema } = require('graphql');
+const dotenv = require('dotenv');
+dotenv.config();
+const express = require('express');
+const {schema} = require('./schema')
+const {root} = require('./rootValue')
+
+const { graphqlHTTP } = require('express-graphql');
+
 const cors = require('cors');
 
-var schema = buildSchema(`
-  type Query {
-    hello: String
-  },
-  
-`);
+const mongoose = require('mongoose')
+
+mongoose.set('useCreateIndex',true)
+
+console.log('db',process.env.DB_URL)
+
  
-var root = { hello: () => 'Hello world!' };
- 
-var app = express();
+const app = express();
 
 app.use(cors());
 
@@ -21,4 +24,11 @@ app.use('/graphql', graphqlHTTP({
   rootValue: root,
   graphiql: true,
 }));
-app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));
+
+mongoose
+  .connect("mongodb+srv://walid:bonchance@cluster0.51dex.mongodb.net/graphQL?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true})
+  .then(() => {
+    app.listen(4000, () => console.log('Now browse to localhost:4000/graphql'));
+  })
+  .catch(err=> console.log(err))
+  

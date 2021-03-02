@@ -1,24 +1,12 @@
 import { useState, useEffect} from 'react'
-import axios from 'axios'
 import './App.css';
-import {gql, useQuery} from '@apollo/client'
+import Admin from './pages/admin'
 
-const query = gql`
-query {
-  hello
- }
-`
+
 function App() {
-  const {loading, data} = useQuery(query)
-  const [datavalue, setDataValue] = useState('null')
-  useEffect(() => {
-    setDataValue(data)
-  },[loading])
-
-
   return (
     <div className="App">
-      {data ? <p>data</p> : <p>no data</p>}
+      <Admin/>
     </div>
   );
 }
