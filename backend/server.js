@@ -6,7 +6,8 @@ const cors = require('cors');
 var schema = buildSchema(`
   type Query {
     hello: String
-  }
+  },
+  
 `);
  
 var root = { hello: () => 'Hello world!' };
